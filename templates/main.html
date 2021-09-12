@@ -1,0 +1,178 @@
+<!DOCTYPE html> {% load static %}
+<html>
+
+<head>
+    <title>Developers United Store model</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Quantico' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Play' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Pattaya' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Piedra' rel='stylesheet'>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />
+    <link href='https://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet'>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Calligraffitti' rel='stylesheet'>
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+    <link href='https://fonts.googleapis.com/css?family=Sedgwick Ave Display' rel='stylesheet'>
+    <link rel="stylesheet" href="{% static 'css/bootstrap2.css' %}">
+    <link rel="stylesheet" href="{% static  'css/bootstrap1.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main1.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/swiper.css' %}">
+    <link href='https://fonts.googleapis.com/css?family=Beth Ellen' rel='stylesheet'>
+    <style type="text/css">
+        html {
+            scroll-behavior: smooth;
+            margin: 0;
+        }
+        
+        nav {
+            margin-top: 0;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        #myBtn {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 30px;
+            z-index: 99;
+            font-size: 18px;
+            border: none;
+            color: black;
+            outline: none;
+            background-color: transparent;
+            cursor: pointer;
+            margin: 0;
+            border-radius: 50%;
+            padding: 7px;
+        }
+        
+        .dropdown {
+            color: black;
+        }
+        
+        #myBtn:hover {
+            background: transparent;
+            color: blue;
+        }
+        
+    @media screen and (max-width:450px) {
+        .hello{
+            display: none;
+        }
+    }
+
+    </style>
+    <script type="text/javascript">
+        var user = '{{request.user}}'
+
+        function getToken(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        var csrftoken = getToken('csrftoken')
+
+        function getCookie(name) {
+            // Split cookie string and get all individual name=value pairs in an array
+            var cookieArr = document.cookie.split(";");
+
+            // Loop through the array elements
+            for (var i = 0; i < cookieArr.length; i++) {
+                var cookiePair = cookieArr[i].split("=");
+
+                /* Removing whitespace at the beginning of the cookie name
+                and compare it with the given string */
+                if (name == cookiePair[0].trim()) {
+                    // Decode the cookie value and return
+                    return decodeURIComponent(cookiePair[1]);
+                }
+            }
+
+            // Return null if not found
+            return null;
+        }
+        var cart = JSON.parse(getCookie('cart'))
+
+        if (cart == undefined) {
+            cart = {}
+            console.log('Cart Created!', cart)
+            document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
+        }
+        console.log('Cart:', cart)
+    </script>
+
+</head>
+
+<body>
+
+    <nav class="navbar  navbar-light bg-light navbar-expand-lg">
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+        <a class="navbar-brand" style="font-family:audiowide;" href="{% url 'store' %}">Store</a>
+
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" style="font-family:Beth Ellen;" href="{% url 'store' %}">
+ Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-link" class="nav-item">
+                    <div class="dropdown">
+                        <a style="font-family:Beth Ellen;" class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+   Contact us
+  </a>
+                        <ul style="font-family:Beth Ellen;" class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li> <a class="dropdown-item" href="{% url 'contact' %}">Contact Form</a></li>
+                            <li> <a class="dropdown-item" href="mailto:">Email us</a></li>
+                            <li> <a class="dropdown-item" href="tel:+212">Call us</a></li>
+                            <li> <a class="dropdown-item" href="{% url 'map' %}">Meet us</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+        </div>
+
+        </ul>
+
+
+        </div>
+        {% if user.is_authenticated %}
+        <h1 class="hello" style="color:rgb(0, 0, 0);font-size:20px;font-family:Calligraffitti;text-transform:uppercase;font-weight: bold;">Hello Mr. {{request.user.customer}}!</h1>{% else %}
+        <h1 class="hello" style="font-size: 12px;font-family: calligraffitti;">Welcome To our store model</h1>{% endif %}
+        <div id="cart" class="form-inline my-2 my-lg-0">
+            <a href="{% url 'cart' %}">
+                <i class="material-icons" id="cart-icon" style="    color: rgb(3, 3, 3);
+width: 30px">&#xe547;</i></a>
+            <p id="cart-total">{{cartItems}}</p>
+        </div>
+    </nav>
+    <div class="django">{% block slider %}{% endblock slider %}</div>
+    <div class="container"> {% block content %}{% endblock content %}</div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
+
+
+</body>
+
+</html>

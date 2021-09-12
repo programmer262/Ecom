@@ -1,0 +1,170 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+     <div class="row">
+        <div class="col-lg-6">
+            <div class="box-element" id="form-wrapper">
+                <form id="form">
+                    <div id="user-info">
+                        <div class="form-field">
+                            <input required class="form-control" type="text" name="name" placeholder="Name..">
+                        </div>
+                        <div class="form-field">
+                            <input required class="form-control" type="email" name="email" placeholder="Email..">
+                        </div>
+                    </div>
+                    
+                    <div id="shipping-info">
+                        <hr>
+                        <p style="font-family: 'Calligraffitti';text-align:center;">Shipping Information:</p>
+                        <hr>
+                        <div class="form-field">
+                            <input class="form-control" type="text" name="address" placeholder="Address.." required>
+                        </div>
+                        <div class="form-field">
+                            <input class="form-control" type="text" name="city" placeholder="City.." required>
+                        </div>
+                        <div class="form-field">
+                            <input class="form-control" type="text" name="state" placeholder="State.." required>
+                        </div>
+                        <div class="form-field">
+                            <input class="form-control" type="text" name="zipcode" placeholder="Zip code.." required>
+                        </div>
+                        <div class="form-field">
+                            <input class="form-control" type="text" name="country" value="Maroc" placeholder="Country...." required>
+                        </div>
+                        <div class="form-field">
+                            <input class="form-control" type="tel" name="phone" placeholder="Phone number.." required>
+                        </div>
+<hr>
+                    <div class="form-field">
+                            <input  class="form-control" style="height:20vh;width:100%;" type="text" name="suggestion" placeholder="Can you give us any suggestions to improve our quality of products or the quality of the site" required>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <input style="border-radius: 20px"  id="form-button" class="btn btn-success btn-block" type="submit" value="Continue">
+                </form>
+            </div>
+
+            <br>
+            <div class="box-element hidden" id="payment-info">
+                <small>Cash à la livraison:</small> &nbsp;&nbsp;&nbsp;
+                <button id="make-payment" class="btn btn-primary" style="border-radius: 20px;">Make payment</button>
+            </div>
+            
+        </div>
+
+        <div class="col-lg-6">
+            <div class="box-element">
+                <a style="border-radius: 20px" class="btn btn-outline-dark" href="{% url 'cart' %}">&#x2190; Back to Cart</a>
+                <hr>
+                <h3 style="font-family: 'Calligraffitti';text-align:center;">Order Summary</h3>
+                <hr>
+                {% for item in items %}
+                <div class="cart-row">
+                    <div style="flex:2"><img class="row-image" src="{{item.product.image.url}}"></div>
+                    <div style="flex:2;font-family: 'Sedgwick Ave Display';"><p>{{item.product.name}}</p></div>
+                    <div style="flex:1;font-family: 'Quantico'"><p>{{item.product.price|floatformat:2}}MAD</p></div>
+                    <div style="flex:1;font-family: 'Quantico'"><p>x{{item.quantity}}</p></div>
+                </div>
+                {% endfor %}
+                <h5 style="font-family: 'Quantico'">Items:   {{order.get_cart_items}}</h5>
+                <h5 style="font-family: 'Quantico'">Total:   {{order.get_cart_total|floatformat:2}}MAD</h5>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var shipping = '{{order.shipping}}'
+        var total = '{{order.get_cart_total|floatformat:2}}'
+
+        if (shipping == 'False'){
+            document.getElementById('shipping-info').innerHTML = ''
+        }
+
+        if (user != 'AnonymousUser'){
+            document.getElementById('user-info').innerHTML = ''
+         }
+
+        if (shipping == 'False' && user != 'AnonymousUser'){
+            //Hide entire form if user is logged in and shipping is false
+                document.getElementById('form-wrapper').classList.add("hidden");
+                //Show payment if logged in user wants to buy an item that does not require shipping
+                document.getElementById('payment-info').classList.remove("hidden");
+        }
+
+        var form = document.getElementById('form')
+        form.addEventListener('submit', function(e){
+            e.preventDefault()
+            console.log('Form Submitted...')
+            document.getElementById('form-button').classList.add("hidden");
+            document.getElementById('payment-info').classList.remove("hidden");
+        })
+
+        document.getElementById('make-payment').addEventListener('click', function(e){
+            submitFormData()
+        })
+
+        function submitFormData(){
+            console.log('Payment button clicked')
+
+            var userFormData = {
+                'name':null,
+                'email':null,
+                'total':total,
+            }
+
+            var shippingInfo = {
+                'address':null,
+                'city':null,
+                'state':null,
+                'zipcode':null,
+                'country':null,
+                'phone':null,
+                'livraison':null,
+                'suggestion':null,
+            }
+
+            if (shipping != 'False'){
+                shippingInfo.address = form.address.value
+                shippingInfo.city = form.city.value
+                shippingInfo.state = form.state.value
+                shippingInfo.zipcode = form.zipcode.value
+                shippingInfo.country = form.country.value
+                shippingInfo.phone = form.phone.value
+                shippingInfo.suggestion = form.suggestion.value
+            }
+
+            if (user == 'AnonymousUser'){
+                userFormData.name = form.name.value
+                userFormData.email = form.email.value
+            }
+
+            console.log('Shipping Info:', shippingInfo)
+            console.log('User Info:', userFormData)
+
+            var url = "/process_order/"
+            fetch(url, {
+                method:'POST',
+                headers:{
+                    'Content-Type':'applicaiton/json',
+                    'X-CSRFToken':csrftoken,
+                }, 
+                body:JSON.stringify({'form':userFormData, 'shipping':shippingInfo}),
+                
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log('Success:', data);
+                alert('Thanks for buying From our store!');  
+
+                cart = {}
+                document.cookie ='cart=' + JSON.stringify(cart) + ";domain=;path=/"
+
+                window.location.href = "{% url 'thanks' %}"
+
+                })
+        }
+    </script>
+{% endblock content %}

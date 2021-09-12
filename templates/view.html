@@ -1,0 +1,67 @@
+{% extends 'main.html' %}{% load static %} {% block content %}
+<button onclick="topFunction()" id="myBtn" title="Go to top"><i style='font-size:24px' class='far'>&#xf35b;</i>
+</button>
+<div style="display: flex;
+flex-direction: row;
+align-items: center;
+justify-content: center;
+align-content: center;
+flex-wrap: wrap;" id="image"><center>
+    <img style="height:auto;position:relative ;" class="img-fluid" src="{{product.image.url}}" alt="Product">
+</center>
+<div class="box-element product">
+
+
+
+    <button style="width: 30%;float: right;font-family: 'Pattaya';" data-product="{{product.id}}" data-action="add" class="btn btn-outline-secondary add-btn update-cart">
+    <i style="float: left;" class="far">&#xf09d;</i><p style="font-style: oblique;font-size-adjust: auto;font-size: 12px;">Add to cart</p>
+</button>
+    <p style="font-family:Piedra;">Description of <strong>{{product.name}}</strong></p>
+
+    <hr>
+    <div id="descriptionofproduct" style="font-family: 'Play';">
+        <p>{{product.Description}}</p>
+        {% if product.list1 %}
+        <ul>
+            <li>{{product.list}}</li>
+            <li>{{product.list1}}</li>
+            <li>{{product.list2}}</li>
+            <li>{{product.list3}}</li>
+            <li>{{product.list4}}</li>
+            <li>{{product.list5}}</li>
+            <li>{{product.list6}}</li>
+            <li>{{product.list7}}</li>
+            <li>{{product.list8}}</li>
+            <li>{{product.list9}}</li>
+            <li>{{product.list10}}</li>
+            <li>{{product.list11}}</li>
+        </ul>
+        {%else%}
+        {% endif %}
+    </div>
+</div></div><br><br><br>
+
+<script type="text/javascript">
+    //Get the button:
+    mybutton = document.getElementById("myBtn");
+
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function() {
+        scrollFunction()
+    };
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 100) {
+            mybutton.style.display = "block";
+        } else {
+            mybutton.style.display = "none";
+        }
+    }
+
+    // When the user clicks on the button, scroll to the top of the document
+    function topFunction() {
+        document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    }
+</script>
+{% endblock content %}
