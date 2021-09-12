@@ -138,6 +138,5 @@ virtualenv-clone==0.5.4
 wcwidth==0.2.5
 webencodings==0.5.1
 websocket-client==0.57.0
-whitenoise==5.2.0
 wrapt==1.12.1
 wsproto==0.15.0
