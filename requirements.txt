@@ -28,7 +28,7 @@ Brotli==1.0.9
 CacheControl==0.12.6
 cachy==0.3.0
 celery==5.0.1
-certifi==2018.10.15
+certifi==2022.12.7
 chardet==3.0.4
 cleo==0.8.1
 click==7.1.2
