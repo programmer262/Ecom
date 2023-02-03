@@ -1,6 +1,6 @@
 asgiref==3.4.1
 cffi==1.14.6
-Django==3.2.7
+Django==3.2.17
 django-jazzmin==2.4.8
 gevent==21.8.0
 greenlet==1.1.1
